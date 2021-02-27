@@ -1,3 +1,68 @@
 from django.contrib import admin
+from .models import Genre, Language, Author, Book, Inventory
 
-# Register your models here.
+#---------------------------------------- Bookshop Management System : Language : Admin Class ----------------------------------------#
+@admin.register(Language)
+class LanguagesInline(admin.ModelAdmin):
+    
+    pass
+
+#---------------------------------------- Bookshop Management System : Genre : Admin Class ----------------------------------------#
+@admin.register(Genre)
+class GenresInline(admin.ModelAdmin):
+    
+    pass
+
+#---------------------------------------- Bookshop Management System : Book : Inline Admin Class ----------------------------------#
+class BooksInline(admin.TabularInline):
+    
+    model = Book
+
+    extra = 0
+
+#---------------------------------------- Bookshop Management System : Author : Admin Class ----------------------------------------#
+@admin.register(Author)
+class AuthorAdmin(admin.ModelAdmin):
+
+    list_display = ('first_name', 'last_name', 'country', 'number_of_books')
+
+    fields = ['first_name', 'last_name', 'country', 'number_of_books']
+
+    inlines = [BooksInline]
+
+#---------------------------------------- Bookshop Management System : Inventory : Inline Admin Class ------------------------------#
+class InventoryInline(admin.TabularInline):
+
+    model = Inventory
+
+    extra = 0
+
+#---------------------------------------- Bookshop Management System : Book : Admin Class ------------------------------------------#
+@admin.register(Book)
+class BookAdmin(admin.ModelAdmin):
+
+    list_display = ('name', 'author', 'show_genre_list')
+
+    inlines = [InventoryInline]
+
+    def show_genre_list(self, object):
+        return ', '.join(genre.name for genre in object.genre.all()[:3])
+
+    show_genre_list.short_description = 'Genre'
+
+#---------------------------------------- Bookshop Management System : Inventory : Admin Class ----------------------------------------#
+@admin.register(Inventory)
+class InventoryAdmin(admin.ModelAdmin):
+
+    list_display = ('book', 'status', 'id')
+
+    list_filter = ('status',)
+
+    fieldsets = (
+        (None, {
+            'fields': ('book',  'id')
+        }),
+        ('Availability', {
+            'fields': ('status',)
+        }),
+    )
