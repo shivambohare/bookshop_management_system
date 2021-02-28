@@ -5,6 +5,7 @@
 1. **Python** 3.6
 2. **pip** 21.x
 3. **postgresql** 12.6
+4. **virtualenv** 20.2.2
 
 ##### Host: Docker
 1. **Docker** version 20.10.3, build 48d30b5
@@ -27,7 +28,9 @@ GRANT ALL PRIVILEGES ON DATABASE scaleworxx_dev TO scaleworxx_user;
 ```
 git clone git@github.com:scaleworxx/bookshop_management_system.git
 cd bookshop_management_system
+** rename the env_sample file to .env
 ```
+
 #### Option1:
 
 ```
