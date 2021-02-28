@@ -43,6 +43,17 @@ class BookAdmin(admin.ModelAdmin):
 
     list_display = ('name', 'author', 'show_genre_list')
 
+    list_filter = ('author', 'genre')
+
+    fieldsets = (
+        ('Information', {
+            'fields': ('name', 'author',  'international_standard_book_number',)
+        }),
+        ('About', {
+            'fields': ('genre', 'language', 'synopsis',)
+        }),
+    )
+
     inlines = [InventoryInline]
 
     def show_genre_list(self, object):
@@ -56,13 +67,13 @@ class InventoryAdmin(admin.ModelAdmin):
 
     list_display = ('book', 'status', 'id')
 
-    list_filter = ('status',)
+    list_filter = ('status','book', 'due_date')
 
     fieldsets = (
-        (None, {
-            'fields': ('book',  'id')
+        ('Information', {
+            'fields': ('book',  'id', 'borrower')
         }),
         ('Availability', {
-            'fields': ('status',)
+            'fields': ('status', 'borrow_date', 'due_date',)
         }),
     )

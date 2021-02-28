@@ -1,15 +1,18 @@
 from django.db import models
 from django.urls import reverse
 import uuid
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 #---------------------------------------- Bookshop Management System : Genre : Model Class -----------------------------------------#
 class Genre(models.Model):
     """Model: Genres"""
 
-    name = models.CharField(max_length=30, help_text='Book Genre (e.g. Narrative Non-Fiction)')
+    genre = models.CharField(max_length=30, help_text='Book Genre (e.g. Narrative Non-Fiction)')
 
     def __str__(self):
-        return self.name
+        return self.genre
 
 #---------------------------------------- Bookshop Management System : Language : Model Class ----------------------------------------#
 class Language(models.Model):
@@ -41,17 +44,18 @@ class Author(models.Model):
     def __str__(self):
         return f'{self.first_name}, {self.last_name}'
 
+    # def __unicode__(self):
+    #     return self.first_name
+
 #---------------------------------------- Bookshop Management System : Book : Model Class -----------------------------------------#
 class Book(models.Model):
     """Model: Books"""
 
     name = models.CharField(max_length=200)
 
-    international_standard_book_number = models.CharField(max_length=13, unique=True)
+    author = models.ForeignKey(Author, help_text='Select author for this book', on_delete=models.SET_NULL, null= True)
 
-    author = models.ForeignKey(Author, help_text='Select authors for this book', on_delete=models.SET_NULL, null= True)
-
-    genre = models.ManyToManyField(Genre, help_text='Select genres for this book')
+    genre = models.ForeignKey(Genre, help_text='Select genre for this book',on_delete=models.SET_NULL, null=True)
 
     language = models.ForeignKey(Language, on_delete=models.SET_NULL, null=True)
 
@@ -62,6 +66,10 @@ class Book(models.Model):
 
     def get_absolute_url(self):
         return reverse('book-detail', args=[str(self.id)])
+
+    @property
+    def author_name(self):
+        return self.author.first_name
 
 
 #---------------------------------------- Bookshop Management System : Inventory : Model Class -----------------------------------------#
@@ -88,6 +96,12 @@ class Inventory(models.Model):
         default='m',
         help_text='Book availability',
     )
+
+    borrower = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="book_borrower", null=True, blank=True,)
+
+    borrow_date = models.DateField(null=True, blank=True)
+
+    due_date = models.DateField(null=True, blank=True)
 
     class Meta:
         ordering = ['status']

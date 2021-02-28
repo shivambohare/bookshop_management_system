@@ -1,0 +1,24 @@
+FROM python:3.6.12-alpine3.12
+RUN apk update
+RUN apk add --no-cache bash
+WORKDIR /app
+RUN apk add make automake gcc g++ subversion python3-dev
+RUN apk add musl-dev libffi-dev openssl-dev
+RUN apk add postgresql-dev
+RUN apk add --update ttf-dejavu fontconfig && rm -rf /var/cache/apk/*
+
+RUN apk add curl dpkg
+
+
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" > /etc/apk/repositories
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" >> /etc/apk/repositories
+
+RUN apk update
+
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY . .
+
+EXPOSE 8000
+EXPOSE 6379
+EXPOSE 5432
