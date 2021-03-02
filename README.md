@@ -28,7 +28,6 @@ GRANT ALL PRIVILEGES ON DATABASE scaleworxx_dev TO scaleworxx_user;
 ```
 git clone git@github.com:scaleworxx/bookshop_management_system.git
 cd bookshop_management_system
-** rename the env_sample file to .env
 ```
 
 #### Option1:
