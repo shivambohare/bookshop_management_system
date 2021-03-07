@@ -31,10 +31,10 @@ SECRET_KEY = 'boq8m=y!%clo&_ap2=v^is(hh#mb0t3f@al-py7w=(3-(w#%n!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+AUTH_USER_MODEL = 'system.User'
+
 ALLOWED_HOSTS = []
 
-
-# Application definition
 
 DJANGO_CORE_APPS = [
     "django.contrib.admin",
@@ -55,12 +55,8 @@ THIRDPARTY_APPS = [
     # "allauth",
     # "allauth.account",
     "rest_framework",
+    'rest_framework.authtoken'
     # "corsheaders",
-    # "simple_history",
-    # "multiselectfield",
-    # "fieldsets_with_inlines",
-    # "django.contrib.humanize",
-    # "import_export",
 ]
 
 INSTALLED_APPS = DJANGO_CORE_APPS + EQUIFI_APPS + THIRDPARTY_APPS
@@ -95,21 +91,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'bookshop_management_system.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
-
-# Password validation
-# https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -154,3 +135,13 @@ CORS_ORIGIN_WHITELIST = [
 CORS_ORIGIN_REGEX_WHITELIST = [
     "http://localhost:3030",
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES':(
+                'rest_framework.permissions.IsAuthenticated',
+    ),
+
+}

@@ -2,8 +2,21 @@ from django.db import models
 from django.urls import reverse
 import uuid
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractUser
 
-User = get_user_model()
+#---------------------------------------- Bookshop Management System : User : Model Class -----------------------------------------#
+class User(AbstractUser):
+
+    ROLE_CHOICES = (
+        ('admin', 'admin'),
+        ('auditor', 'auditor'),
+        ('student', 'student'),
+    )
+
+    role = models.CharField(
+        max_length=10,
+        choices=ROLE_CHOICES,
+    )
 
 #---------------------------------------- Bookshop Management System : Genre : Model Class -----------------------------------------#
 class Genre(models.Model):
@@ -28,11 +41,8 @@ class Author(models.Model):
     """Model: Authors"""
 
     first_name = models.CharField(max_length=20)
-
     last_name = models.CharField(max_length=20)
-
     country = models.CharField(max_length=20)
-
     number_of_books = models.IntegerField(default=0, verbose_name=("Number of Books Published"))
 
     class Meta:
@@ -44,21 +54,14 @@ class Author(models.Model):
     def __str__(self):
         return f'{self.first_name}, {self.last_name}'
 
-    # def __unicode__(self):
-    #     return self.first_name
-
 #---------------------------------------- Bookshop Management System : Book : Model Class -----------------------------------------#
 class Book(models.Model):
     """Model: Books"""
 
     name = models.CharField(max_length=200)
-
     author = models.ForeignKey(Author, help_text='Select author for this book', on_delete=models.SET_NULL, null= True)
-
     genre = models.ForeignKey(Genre, help_text='Select genre for this book',on_delete=models.SET_NULL, null=True)
-
     language = models.ForeignKey(Language, on_delete=models.SET_NULL, null=True)
-
     synopsis = models.TextField(max_length=1000)
 
     def __str__(self):
@@ -77,18 +80,17 @@ class Inventory(models.Model):
     """Model: Inventory"""
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4)
-
     book = models.ForeignKey('Book', on_delete=models.RESTRICT)
-
     version = models.CharField(max_length=20)
-
+    borrower = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="book_borrower", null=True, blank=True,)
+    borrow_date = models.DateField(null=True, blank=True)
+    due_date = models.DateField(null=True, blank=True)
     BOOK_STATUS = (
         ('l', 'Lent'),
         ('a', 'Available'),
         ('b', 'Booked'),
         ('r', 'Reserved')
     )
-
     status = models.CharField(
         max_length=1,
         choices=BOOK_STATUS,
@@ -96,12 +98,6 @@ class Inventory(models.Model):
         default='m',
         help_text='Book availability',
     )
-
-    borrower = models.ForeignKey(User, on_delete=models.SET_NULL, related_name="book_borrower", null=True, blank=True,)
-
-    borrow_date = models.DateField(null=True, blank=True)
-
-    due_date = models.DateField(null=True, blank=True)
 
     class Meta:
         ordering = ['status']

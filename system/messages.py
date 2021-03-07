@@ -1,0 +1,18 @@
+class ERROR_MESSAGES:
+    """Class: Error Messages"""
+
+    GENRE_404 = "The requested Genre does not exist. Make sure the primary key value is correct"
+    LANGUAGE_404 = "The requested Language does not exist. Make sure the primary key value is correct"
+    BOOK_404 = "The requested Book does not exist. Make sure the primary key value is correct"
+    INVENTORY_404 = "The requested Inventory does not exist. Make sure the primary key value is correct"
+    USER_404 = "The requested User does not exist. Make sure the primary key value is correct"
+    AUTHOR_404 = "The requested Author does not exist. Make sure the primary key value is correct"
+    BORROWER_404 = "The requested Borrower does not exist. Make sure the primary key value is correct"
+    GENRE_403 = "You are not authorized to perform this action with respect to Genres"
+    LANGUAGE_403 = "You are not authorized perform this action with respect to Languages"
+    BOOK_403 = "You are not authorized to perform this action with respect to Books"
+    INVENTORY_403 = "You are not authorized to perform this action with respect to Inventories"
+    USER_403 = "You are not authorized to perform this action with respect to Users"
+    AUTHOR_403 = "You are not authorized to perform this action with respect to Authors"
+    COPIES_404 = "No available copies exist"
+    DELETE_200 = "Delete Request Successfull"
